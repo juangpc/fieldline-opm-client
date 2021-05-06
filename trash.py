@@ -8,7 +8,7 @@ import threading, queue
 import time
 
 # [(0, 1), (0, 3), (0, 4), (0, 5), (0, 6), (0, 7), (0, 8), (0, 9), (0, 10), (0, 11), (0, 12), (0, 13), (0, 14), (0, 15), (1, 1), (1, 2), (1, 3), (1, 4), (1, 5), (1, 6), (1, 7), (1, 8), (1, 9), (1, 10), (1, 11), (1, 12), (1, 13), (1, 14)]
-
+# %%
 stopMeasurement = False
 
 values = []   
@@ -57,11 +57,18 @@ def turn_off_broken_sensors():
         for s in broken_sensors[ch]:
             fService.turn_off_sensor(ch, s)
 
-# #############################################
+def end_measurement():
+    if fService.is_service_running():
+        fService.stop()
+        stopMeasurement = True
+
+# %%
 
     init_instrumentation()
 
-    time.sleep(2)
+    # time.sleep(2)
+
+# %%
 
     fService.start()
     print ("fService started.")
@@ -71,29 +78,35 @@ def turn_off_broken_sensors():
     # fService.start_data()
     # print("fService data started.")
 
-    time.sleep(2)
+    # time.sleep(2)
+
+# %%
 
     fService.connect(ip_list)
     print ("fService ip list connected")
 
-    time.sleep(2)
+    # time.sleep(2)
+
+# %%
 
     for_all_valid_sensors('restart_sensor')
 
-    time.sleep(2)
+    # time.sleep(2)
+
+# %%
 
     for_all_valid_sensors('coarse_zero_sensor')
     
-    time.sleep(2)
+    # time.sleep(2)
+
+# %%
 
     for_all_valid_sensors('fine_zero_sensor')
+    # time.sleep(2)
+    
+# %%
 
     threading.Thread(target=DataRetreiverThread, daemon=True).start()
-
-def end_measurement():
-    if fService.is_service_running():
-        fService.stop()
-        stopMeasurement = True
 
 
 # turn-on the worker thread
