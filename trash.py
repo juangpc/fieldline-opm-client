@@ -34,46 +34,42 @@ def init_instrumentation():
     global working_sensors = [(1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15),
                               (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14)]
     global ip_list = ['192.168.2.42','192.168.2.47']
-
-    func_dict = { 
-        'start':fService.start,
-        'start_data':fService.start_data,
-        'turn_off_sensor':fService.turn_off_sensor,
-        'restart_sensor':fService.restart_sensor,
-        'coarse_zero_sensor':fService.coarse_zero_sensor,
-        'fine_zero_sensor':fService.fine_zero_sensor,
-        'check_all_sensors_restarted':check_all_sensors_restarted
-    }
+    global fConnector = FieldLineConnector()
     
-    def for_all_valid_sensors(f):
-        for ch in working_chassis:
-            for s in working_sensors[ch]:
-                func_dict[f](ch, s)
+    global fService = FieldLineService(fConnector, prefix="")
+    global func_dict = { 
+            'start':fService.start,
+            'start_data':fService.start_data,
+            'turn_off_sensor':fService.turn_off_sensor,
+            'restart_sensor':fService.restart_sensor,
+            'coarse_zero_sensor':fService.coarse_zero_sensor,
+            'fine_zero_sensor':fService.fine_zero_sensor,
+            'check_all_sensors_restarted':check_all_sensors_restarted
+        }
 
-    def turn_off_broken_sensors():
-        for ch in working_chassis:
-            for s in broken_sensors[ch]:
-                fService.turn_off_sensor(ch, s)
+def for_all_valid_sensors(f):
+    for ch in working_chassis:
+        for s in working_sensors[ch]:
+            func_dict[f](ch, s)
+
+def turn_off_broken_sensors():
+    for ch in working_chassis:
+        for s in broken_sensors[ch]:
+            fService.turn_off_sensor(ch, s)
 
 # #############################################
 
-    initInstrumentation()
-
-    fConnector = FieldLineConnector()
-    
-    time.sleep(2)
-
-    fService = FieldLineService(fConnector, prefix="")
+    init_instrumentation()
 
     time.sleep(2)
 
     fService.start()
     print ("fService started.")
 
-    time.sleep(2)
+    # time.sleep(2)
 
-    fService.start_data()
-    print("fService data started.")
+    # fService.start_data()
+    # print("fService data started.")
 
     time.sleep(2)
 
@@ -90,9 +86,6 @@ def init_instrumentation():
     
     time.sleep(2)
 
-    # for ch in working_chassis:        
-    #     for s in working_sensors[ch]:
-    #         fService.fine_zero_sensor(ch, s)
     for_all_valid_sensors('fine_zero_sensor')
 
     threading.Thread(target=DataRetreiverThread, daemon=True).start()
