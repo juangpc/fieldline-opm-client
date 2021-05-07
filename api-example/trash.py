@@ -6,14 +6,9 @@ import queue
 import time
 import threading
 
-# %%
-# test = [(0, 1), (0, 3), (0, 4), (0, 5), (0, 6), (0, 7), (0, 8), (0, 9), (0, 10), (0, 11), (0, 12), (0, 13), (0, 14), (0, 15), (1, 1), (1, 2), (1, 3), (1, 4), (1, 5), (1, 6), (1, 7), (1, 8), (1, 9), (1, 10), (1, 11), (1, 12), (1, 13), (1, 14)]
-# %%
 stopMeasurement = False
 
 values = []   
-
-
 
 working_chassis = [0, 1]
 broken_sensors = [(2, 16),()]
@@ -35,11 +30,6 @@ def connect_to_opm():
     time.sleep(.5)
     fService.connect(ip_list)
     print ("fService connected.")
-
-def init_sensors():
-    restart_all_sensors()
-    coarse_zero_all_sensors()
-    fine_zero_all_sensors()
 
 def num_restarted_sensors():
     num_sens = 0
@@ -108,6 +98,11 @@ def fine_zero_all_sensors():
             time.sleep(.1)
     wait_for_fine_zero_to_finish()
     print("All sensors fine-zeroed.")
+
+def init_sensors():
+    restart_all_sensors()
+    coarse_zero_all_sensors()
+    fine_zero_all_sensors()
 
 def start_acquisition():
     fService.start_data()
