@@ -120,9 +120,8 @@ def parse_dictionary_data(dictionary_data):
 
 def data_retreiver_thread():
     global stopMeasurement
-    # while not stopMeasurement:
-    for i in range(0, 100):   
-        data = fConnector.data_q.get()
+    while not stopMeasurement:
+        data = fConnector.data_q.get(True, 0.01)
         parse_dictionary_data(data)
         # print(f'Working on {item} ...')
         # time.sleep(1)
