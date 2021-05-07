@@ -24,7 +24,7 @@ def num_working_sensors():
         num_sens += len(working_sensors[ch])
     return num_sens
 
-def connect_to_opm():
+def init_connection():
     fService.start()
     print ("fService started.")
     time.sleep(.5)
@@ -64,7 +64,7 @@ def wait_for_fine_zero_to_finish():
     while (num_fine_zeroed_sensors() < num_working_sensors()):
         time.sleep(.1)        
 
-def turn_off_broken_sensors():
+def turn_off_all_broken_sensors():
     for ch in working_chassis:
         for s in broken_sensors[ch]:
             fService.turn_off_sensor(ch, s)
@@ -73,7 +73,6 @@ def end_measurement():
     if fService.is_service_running():
         fService.stop()
         stopMeasurement = True
-
 
 def restart_all_working_sensors():
     for ch in working_chassis:
@@ -100,6 +99,7 @@ def fine_zero_all_working_sensors():
     print("All sensors fine-zeroed.")
 
 def init_sensors():
+    turn_off_all_broken_sensors()
     restart_all_working_sensors()
     coarse_zero_all_working_sensors()
     fine_zero_all_working_sensors()
