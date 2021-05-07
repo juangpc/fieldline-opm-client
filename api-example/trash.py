@@ -75,7 +75,7 @@ def end_measurement():
         stopMeasurement = True
 
 
-def restart_all_sensors():
+def restart_all_working_sensors():
     for ch in working_chassis:
         for s in working_sensors[ch]:
             fService.restart_sensor(ch, s)
@@ -83,7 +83,7 @@ def restart_all_sensors():
     wait_for_restart_to_finish()
     print("All sensors restarted.")
 
-def coarse_zero_all_sensors():
+def coarse_zero_all_working_sensors():
     for ch in working_chassis:
         for s in working_sensors[ch]:
             fService.coarse_zero_sensor(ch, s)
@@ -91,7 +91,7 @@ def coarse_zero_all_sensors():
     wait_for_coarse_zero_to_finish()
     print("All sensors coarse-zeroed.")
     
-def fine_zero_all_sensors():
+def fine_zero_all_working_sensors():
     for ch in working_chassis:
         for s in working_sensors[ch]:
             fService.fine_zero_sensor(ch, s)
@@ -100,9 +100,9 @@ def fine_zero_all_sensors():
     print("All sensors fine-zeroed.")
 
 def init_sensors():
-    restart_all_sensors()
-    coarse_zero_all_sensors()
-    fine_zero_all_sensors()
+    restart_all_working_sensors()
+    coarse_zero_all_working_sensors()
+    fine_zero_all_working_sensors()
 
 def start_acquisition():
     fService.start_data()
