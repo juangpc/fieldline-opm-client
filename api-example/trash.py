@@ -6,7 +6,8 @@ import queue
 import time
 import threading
 
-stopMeasurement = False
+measure_flag = True
+measure_flag_lock = threading.Lock()
 
 values = []   
 
@@ -69,10 +70,24 @@ def turn_off_all_broken_sensors():
         for s in broken_sensors[ch]:
             fService.turn_off_sensor(ch, s)
 
+def continue_measurement(*argv):
+    global measure_flag
+    global measure_flag_lock
+    if len(argv) is 0:
+        measure_flag_lock.acquire()
+        stopFlag = measure_flag
+        measure_flag_lock.release()
+        return stopFlag
+    if len(argv) is 1 and type(argv[0]) is bool:
+        measure_flag_lock.acquire()
+        measure_flag = argv[0]
+        measure_flag_lock.release()
+        return argv[0]
+
 def end_measurement():
     if fService.is_service_running():
         fService.stop()
-        stopMeasurement = True
+        continue_measurement(False)
 
 def restart_all_working_sensors():
     for ch in working_chassis:
@@ -108,7 +123,8 @@ def start_acquisition():
     fService.start_data()
     print("fService data started.")
     time.sleep(1)
-    threading.Thread(target=data_retreiver_thread, daemon=True).start()
+    d = threading.Thread(target=data_retreiver_thread, daemon=True)
+    d.start()
 
 def parse_dictionary_data(dictionary_data):
     global values
@@ -119,8 +135,7 @@ def parse_dictionary_data(dictionary_data):
     #     pass
 
 def data_retreiver_thread():
-    global stopMeasurement
-    while not stopMeasurement:
+    while continue_measurement():
         data = fConnector.data_q.get(True, 0.01)
         parse_dictionary_data(data)
         # print(f'Working on {item} ...')
@@ -129,13 +144,8 @@ def data_retreiver_thread():
         fConnector.data_q.task_done()
 
 def stop_acquisition():
-    
     if fService.is_service_running():
         fService.stop()
-
     fConnector.data_q.join()
-    
-    global stopMeasurement
-    stopMeasurement = True
-    
+    continue_measurement(False)
     print("Measurement stopped.")
