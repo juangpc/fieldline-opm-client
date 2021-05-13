@@ -9,8 +9,6 @@ import threading
 measure_flag = True
 measure_flag_lock = threading.Lock()
 
-values = []   
-
 working_chassis = [0, 1]
 broken_sensors = [(2, 16),()]
 working_sensors = [(1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15),
@@ -126,13 +124,11 @@ def start_acquisition():
     d = threading.Thread(target=data_retreiver_thread, daemon=True)
     d.start()
 
-def parse_dictionary_data(dictionary_data):
-    global values
-    values.append(dictionary_data)
-    # for dict in dictionary_data:
-    #     dict['00:01:28'][data]
-    #     values.append(dictionary_data)
-    #     pass
+def parse_dictionary_data(input_data):
+    for dict in input_data:
+        for sensor_data in dict.keys():
+            sensor_data[]
+
 
 def data_retreiver_thread():
     while continue_measurement():
