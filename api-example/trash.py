@@ -128,7 +128,9 @@ def start_acquisition():
     d.start()
 
 def parse_data(data):
-    values.append(data)
+    for dd in data:
+        for sensor_data in dd.keys():
+            sensor_data[]
     # for dict in data:
     #     dict['00:01:28'][data]
     #     values.append(data)
