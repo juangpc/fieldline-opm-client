@@ -9,13 +9,12 @@ import threading
 measure_flag = True
 measure_flag_lock = threading.Lock()
 
-values = []   
-
 working_chassis = [0, 1]
 broken_sensors = [(2, 16),()]
 working_sensors = [(1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15),
                    (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14)]
-ip_list = ['192.168.2.42','192.168.2.47']
+# ip_list = ['192.168.2.42','192.168.2.47']
+ip_list = ['172.21.16.155','172.21.16.160']
 fConnector = FieldLineConnector()
 fService = FieldLineService(fConnector, prefix="")
 
@@ -30,6 +29,8 @@ def init_connection():
     print ("fService started.")
     time.sleep(.5)
     fService.connect(ip_list)
+    while fService.get_sensor_state(0,1) is None:
+        time.sleep(1)
     print ("fService connected.")
 
 def num_restarted_sensors():
@@ -73,16 +74,16 @@ def turn_off_all_broken_sensors():
 def continue_measurement(*argv):
     global measure_flag
     global measure_flag_lock
-    if len(argv) is 0:
+    if len(argv) == 0:
         measure_flag_lock.acquire()
         stopFlag = measure_flag
         measure_flag_lock.release()
         return stopFlag
-    if len(argv) is 1 and type(argv[0]) is bool:
+    if len(argv) == 1 and type(argv[0]) is bool:
         measure_flag_lock.acquire()
         measure_flag = argv[0]
         measure_flag_lock.release()
-        return argv[0]
+        return continue_measurement()
 
 def end_measurement():
     if fService.is_service_running():
@@ -126,22 +127,25 @@ def start_acquisition():
     d = threading.Thread(target=data_retreiver_thread, daemon=True)
     d.start()
 
-def parse_dictionary_data(dictionary_data):
-    global values
-    values.append(dictionary_data)
-    # for dict in dictionary_data:
+def parse_data(data):
+    values.append(data)
+    # for dict in data:
     #     dict['00:01:28'][data]
-    #     values.append(dictionary_data)
+    #     values.append(data)
     #     pass
 
 def data_retreiver_thread():
+    f = open("test123.txt", "a")
     while continue_measurement():
         data = fConnector.data_q.get(True, 0.01)
-        parse_dictionary_data(data)
+        
+        f.write(str(data))
+
         # print(f'Working on {item} ...')
         # time.sleep(1)
         # print(f'Finished {item}')
         fConnector.data_q.task_done()
+    f.close()
 
 def stop_acquisition():
     if fService.is_service_running():
@@ -149,3 +153,15 @@ def stop_acquisition():
     fConnector.data_q.join()
     continue_measurement(False)
     print("Measurement stopped.")
+
+
+init_connection()
+
+init_sensors()
+
+start_acquisition()
+time.sleep(15)
+stop_acquisition()
+
+
+
