@@ -6,8 +6,8 @@ Prerequisits:
 
 1) Download and extract api-example.zip
 2) cd api-example
-3) python -m venv venv
-4) . venv/Scripts/activate
+3) python3.8 -m venv venv
+4) . venv/bin/activate
 5) pip install -r requirements-api.txt
 6) pip install <path to downloaded API whl file>
 7) python main.py
