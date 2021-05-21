@@ -15,6 +15,8 @@ working_sensors = [(1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15),
                    (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14)]
 # ip_list = ['192.168.2.42','192.168.2.47']
 ip_list = ['172.21.16.155','172.21.16.160']
+channel_key_list = []
+default_data_type = 28
 fConnector = FieldLineConnector()
 fService = FieldLineService(fConnector, prefix="")
 
@@ -130,7 +132,8 @@ def start_acquisition():
 def parse_data(data):
     for dd in data:
         for sensor_data in dd.keys():
-            sensor_data[]
+            # sensor_data[]
+            pass
     # for dict in data:
     #     dict['00:01:28'][data]
     #     values.append(data)
@@ -156,14 +159,20 @@ def stop_acquisition():
     continue_measurement(False)
     print("Measurement stopped.")
 
+def create_channel_keys():
+     for chassis in working_chassis:
+        for sensors in working_sensors[chassis]:
+            key = str(chassis).zfill(2) + ':' + str(sensors).zfill(2) + ':' + str(default_data_type).zfill(2)
+            channel_key_list.append(key)
 
-init_connection()
 
-init_sensors()
+# init_connection()
 
-start_acquisition()
-time.sleep(15)
-stop_acquisition()
+# init_sensors()
+
+# start_acquisition()
+# time.sleep(15)
+# stop_acquisition()
 
 
 
