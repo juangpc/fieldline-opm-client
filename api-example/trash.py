@@ -5,6 +5,7 @@ from fieldline_api.fieldline_datatype import FieldLineWaveType
 import queue
 import time
 import threading
+import FieldTrip
 
 measure_flag = True
 measure_flag_lock = threading.Lock()
@@ -18,6 +19,11 @@ ip_list = ['192.168.111.103','192.168.111.102']
 
 fConnector = FieldLineConnector()
 fService = FieldLineService(fConnector, prefix="")
+
+ft_client = FieldTrip.Client()
+ft_IP = 'localhost'
+ft_port = 1972
+ft_data_type = DATATYPE_FLOAT32
 
 def num_working_sensors():
     num_sens = 0
@@ -131,7 +137,8 @@ def start_acquisition():
 def parse_data(data):
     for dd in data:
         for sensor_data in dd.keys():
-            sensor_data[]
+            # sensor_data[]
+            pass
     # for dict in data:
     #     dict['00:01:28'][data]
     #     values.append(data)
@@ -157,11 +164,35 @@ def stop_acquisition():
     continue_measurement(False)
     print("Measurement stopped.")
 
+def create_channel_keys():
+     for chassis in working_chassis:
+        for sensors in working_sensors[chassis]:
+            key = str(chassis).zfill(2) + ':' + str(sensors).zfill(2) + ':' + str(default_data_type).zfill(2)
+            channel_key_list.append(key)
 
-init_connection()
+def connect_to_fieldtrip_buffer():
+    ft_client.connect(ft_IP, ft_port)
 
-init_sensors()
+def create_ft_header():
+    ft_client.putHeader(num_working_sensors(), default_sample_freq, ft_data_type)
 
+def test_data_to_ft():
+    arr_data = np.zeros((200,num_working_sensors()), dtype=numpy.single)
+    ft_client.putData(arr_data)
+
+# init_connection()
+
+# init_sensors()
+
+<<<<<<< HEAD
 start_acquisition()
 time.sleep(15)
 stop_acquisition()
+=======
+# start_acquisition()
+# time.sleep(15)
+# stop_acquisition()
+
+
+
+>>>>>>> 5f72e379c16e360c6a6642a803949d2f867cf387
