@@ -65,7 +65,7 @@ def wait_for_coarse_zero_to_finish():
 
 def wait_for_fine_zero_to_finish():
     while (num_fine_zeroed_sensors() < num_working_sensors()):
-        time.sleep(.1)        
+        time.sleep(.1)
 
 def turn_off_all_broken_sensors():
     for ch in working_chassis:
@@ -106,7 +106,7 @@ def coarse_zero_all_working_sensors():
             time.sleep(.1)
     wait_for_coarse_zero_to_finish()
     print("All sensors coarse-zeroed.")
-    
+
 def fine_zero_all_working_sensors():
     for ch in working_chassis:
         for s in working_sensors[ch]:
@@ -141,7 +141,7 @@ def data_retreiver_thread():
     f = open("test123.txt", "a")
     while continue_measurement():
         data = fConnector.data_q.get(True, 0.01)
-        
+
         f.write(str(data))
 
         # print(f'Working on {item} ...')
@@ -165,6 +165,3 @@ init_sensors()
 start_acquisition()
 time.sleep(15)
 stop_acquisition()
-
-
-
