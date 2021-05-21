@@ -5,6 +5,7 @@ from fieldline_api.fieldline_datatype import FieldLineWaveType
 import queue
 import time
 import threading
+import FieldTrip
 
 measure_flag = True
 measure_flag_lock = threading.Lock()
@@ -17,8 +18,15 @@ working_sensors = [(1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15),
 ip_list = ['172.21.16.155','172.21.16.160']
 channel_key_list = []
 default_data_type = 28
+default_sample_freq = 0
+
 fConnector = FieldLineConnector()
 fService = FieldLineService(fConnector, prefix="")
+
+ft_client = FieldTrip.Client()
+ft_IP = 'localhost'
+ft_port = 1972
+ft_data_type = DATATYPE_FLOAT32
 
 def num_working_sensors():
     num_sens = 0
@@ -164,6 +172,13 @@ def create_channel_keys():
         for sensors in working_sensors[chassis]:
             key = str(chassis).zfill(2) + ':' + str(sensors).zfill(2) + ':' + str(default_data_type).zfill(2)
             channel_key_list.append(key)
+
+def connect_to_fieldtrip_buffer():
+    ft_client.connect(ft_IP, ft_port)
+
+def create_ft_header():
+    ft_client.putHeader(num_working_sensors(), default_sample_freq, ft_data_type)
+
 
 
 # init_connection()
