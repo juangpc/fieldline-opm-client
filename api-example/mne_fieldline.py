@@ -184,6 +184,8 @@ def parse_data(data):
 #     time.sleep(.5)
     
 def data_retreiver_thread():
+    while fConnector.data_q.empty():
+        time.sleep(.1)
     while continue_measurement():
         data = fConnector.data_q.get(True, 0.01)
         if process_data():
@@ -201,7 +203,7 @@ def init_connection():
     for chassis in working_chassis:
         version = fService.get_version(chassis)
         print("Connection with chassis: " + str(chassis) + "... OK")
-        print("Chassis version" + version)
+        print("Chassis " + version)
     print("---")
 
 def start_acquisition():
