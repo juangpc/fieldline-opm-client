@@ -179,7 +179,9 @@ def connect_to_fieldtrip_buffer():
 def create_ft_header():
     ft_client.putHeader(num_working_sensors(), default_sample_freq, ft_data_type)
 
-
+def test_data_to_ft():
+    arr_data = np.zeros((200,num_working_sensors()), dtype=numpy.single)
+    ft_client.putData(arr_data)
 
 # init_connection()
 
