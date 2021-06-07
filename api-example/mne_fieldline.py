@@ -161,12 +161,12 @@ def init_acquisition():
     init_ft_header()
     fService.start_data()
     print("fService data started.")
+    continue_measurement(True)
     time.sleep(1)
     acquisition_thread = threading.Thread(target=data_retreiver_thread, daemon=True)
     acquisition_thread.start()
     # acquisition_thread_dalayed_stopper = threading.Thread(target=delayed_data_retriever_stopper,args=[ttime], daemon=True)
     # acquisition_thread_dalayed_stopper.start()
-
 
 def parse_data(data):
     channels = create_channel_key_list()
@@ -184,12 +184,9 @@ def parse_data(data):
 #     time.sleep(.5)
     
 def data_retreiver_thread():
-    while fConnector.data_q.empty():
-        time.sleep(.1)
     while continue_measurement():
-        data = fConnector.data_q.get(True, 0.01)
-        if process_data():
-            parse_data(data)
+        data = fConnector.data_q.get()
+        parse_data(data)
         fConnector.data_q.task_done()
 
 def init_connection():
@@ -203,14 +200,16 @@ def init_connection():
     for chassis in working_chassis:
         version = fService.get_version(chassis)
         print("Connection with chassis: " + str(chassis) + "... OK")
-        print("Chassis " + version)
+        print("Chassis " + str(version))
     print("---")
 
 def start_acquisition():
     process_data(True)
+    continue_measurement(True)
 
 def stop_acquisition():
     process_data(False)
+    continue_measurement(False)
     
 def stop_service():
     process_data(False)
@@ -223,7 +222,7 @@ if __name__ == "__main__":
     
     init_connection()
 
-    # init_sensors()
+    init_sensors()
 
     # init_acquisition()
     # time.sleep(15)
