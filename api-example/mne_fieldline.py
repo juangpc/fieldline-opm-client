@@ -20,6 +20,7 @@ working_chassis = [0, 1]
 broken_sensors = [(2, 6, 16),()]
 working_sensors = [(1, 3, 4, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15),
                    (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14)]
+channel_key_list = []
 
 ip_list = ['192.168.111.103','192.168.111.102']
 
@@ -193,6 +194,8 @@ def init_sensors():
     restart_all_working_sensors()
     coarse_zero_all_working_sensors()
     fine_zero_all_working_sensors()
+    global channel_key_list
+    channel_key_list = create_channel_key_list()
 
 def init_acquisition():
     connect_to_fieldtrip_buffer()
@@ -207,10 +210,10 @@ def init_acquisition():
     # acquisition_thread_dalayed_stopper.start()
 
 def parse_data(data):
-    channels = create_channel_key_list()
+    global channel_key_list
     chunk = numpy.zeros((len(data),num_working_sensors()), dtype=numpy.single)
     for sample_i in range(len(data)):
-        for ch_i, channel in enumerate(channels):
+        for ch_i, channel in enumerate(channel_key_list):
             chunk[sample_i, ch_i] = data[0][channel]["data"] * data[0][channel]["calibration"] * 1000000;
     ft_client.putData(chunk)
     print("Writing to buffer")
