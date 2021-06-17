@@ -67,7 +67,7 @@ class fieldline_phantom:
     def data_producer_routine(self):
         while True:
             if self.send_data_flag:
-                data = numpy.random.rand(self.num_samples, self.num_sensors).astype(numpy.float32)
+                data = numpy.random.rand(self.num_samples, self.num_sensors).astype(numpy.float32) * 1e-12
                 self.ft_client.putData(data)
 
 def num_working_sensors():
