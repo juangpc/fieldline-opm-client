@@ -1,3 +1,7 @@
+import queue
+
+import mne_fieldline_config as config
+
 class PhantomConnector:
 
     def __init__(self):
@@ -11,49 +15,55 @@ class PhantomConnector:
         self.valid_sensors_list = []
         self.data_q = queue.Queue()
 
+        self.moc_sensor_list = config.working_sensors
+        self.moc_chassis_ip_list = []
+        self.moc_sensors = {}
+
 class PhantomService:
 
         def __init__(self, connector, prefix):
-        self.connector = connector
-        self.prefix = prefix
+            self.connector = connector
+            self.prefix = prefix
+            self.is_running = False
 
-        def turn_off_sensors(chassis, sensor):
+        def turn_off_sensors(self, chassis, sensor):
             pass
 
-        def is_service_running():
+        def is_service_running(self):
+            return self.is_running
+
+        def start(self):
+            self.is_running = True
+
+        def stop(self):
+            self.is_running = False
+
+        def restart_sensor(self, chassis, sensor):
             pass
 
-        def start():
+        def coarse_zero_sensor(self, chassis, sensor):
             pass
 
-        def stop():
+        def fine_zero_sensor(self, chassis, sensor):
             pass
 
-        def restart_sensor(chassis, sensor):
+        def start_data(self):
             pass
 
-        def coarse_zero_sensor(chassis, sensor):
+        def stop_data(self):
             pass
 
-        def fine_zero_sensor(chassis, sensor):
-            pass
-
-        def start_data():
-            pass
-
-        def stop_data():
-            pass
-
-        def connect(chassis_ip_list):
-            pass
+        def connect(self, chassis_ip_list):
+            self.connector.moc_chassis_ip_list = chassis_ip_list
+            index_list = []
+            i = 0
+            for ip in chassis_ip_list:
+                index_list.append(i)
+                i += 1
+            self.moc_sensors = dict(zip(index_list, self.connector.moc_sensor_list))
         
-        def get_sensor_state(chassis, sensor):
+        def get_sensor_state(self, chassis, sensor):
             pass
 
-        def get_version(chassis):
+        def get_version(self, chassis):
             pass
-
-
-            
-
-
