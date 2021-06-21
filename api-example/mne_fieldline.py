@@ -13,11 +13,9 @@ def start_measurement():
 
 def stop_measurement():
     lib.stop_measurement()
-    pass
 
 def disconnect():
     lib.stop_service()
-    pass
 
 class main_runner:
     def __init__(self):
@@ -31,6 +29,4 @@ class main_runner:
 if __name__ == "__main__":
     mr = main_runner()
     input("Press any key to stop")
-
-    
     
