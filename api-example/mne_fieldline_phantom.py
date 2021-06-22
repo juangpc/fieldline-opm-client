@@ -34,17 +34,17 @@ class PhantomConnector:
         sensors_dict = {}
         data_type = 28
         for chassis_i in channel_list:
-            accum = 0
+            channel_num_accumulator = 0
             for i in range(channel_list[chassis_i].len()):
                 key = str(chassis_i).zfill(2) + ':' + str(channel_list[chassis_i][i]).zfill(2)
                 sensors_dict[key + ':' + str(28).zfill(2)] = {'data': generate_data(),
                                             'sensor': key,
-                                            'idx': accum,
+                                            'idx': channel_num_accumulator,
                                             'sensor_id': channel_list[chassis_i][i],
                                             'data_type': 28,
                                             'calibration': 1.0e-16,
                                             'timestamp': 18528226
-                accum += 1
+                channel_num_accumulator += 1
         return sensors_dict
     
 
