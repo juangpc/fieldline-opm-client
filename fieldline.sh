@@ -51,11 +51,14 @@ elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
         pip install -r requirements-api.txt
         pip install fieldline_api-0.0.13-py3-none-any.whl
 
-        #ft buffer
+        # ft buffer
         ./buffer/linux/buffer &> /dev/null &
+        BUFFER_PID=$!
 
-        #fieldline
+        # Fieldline
         python3 mne_fieldline.py
+
+        kill -9 ${BUFFER_PID}
     fi
 
     # ############## LINUX SECTION ENDS ####################
