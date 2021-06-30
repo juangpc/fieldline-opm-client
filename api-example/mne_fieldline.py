@@ -1,5 +1,8 @@
 import mne_fieldline_lib as lib
 
+def set_config_file(*argv):
+    print(argv)
+
 def connect():
     lib.init_fieldline_connection()
     lib.init_fieldtrip_connection()
