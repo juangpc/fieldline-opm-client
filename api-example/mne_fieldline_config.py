@@ -10,4 +10,4 @@ ft_IP = 'localhost'
 ft_port = 1972
 
 #### DEBUG SETTINGS
-use_phantom = True
+use_phantom = False

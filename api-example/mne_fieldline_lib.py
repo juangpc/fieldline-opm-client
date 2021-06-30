@@ -1,14 +1,15 @@
 # mne_fieldline_connector
 # gabrielbmotta, juangpc
-from fieldline_connector import FieldLineConnector
-from fieldline_api.fieldline_service import FieldLineService
-from fieldline_api.fieldline_datatype import FieldLineWaveType
+
 import mne_fieldline_config as config
+import mne_fieldline_phantom as spooky
+import mne_fieldline_tools as tools
 
 import queue
 import time
 import threading
 import numpy
+
 import FieldTrip
 
 measure_flag = True
@@ -24,8 +25,16 @@ channel_key_list = []
 
 ip_list = config.ip_list
 
-fConnector = FieldLineConnector()
-fService = FieldLineService(fConnector, prefix="")
+if(config.use_phantom):
+    fConnector = spooky.PhantomConnector()
+    fService = spooky.PhantomService(fConnector, prefix="")
+else:
+    from fieldline_connector import FieldLineConnector
+    from fieldline_api.fieldline_service import FieldLineService
+    from fieldline_api.fieldline_datatype import FieldLineWaveType
+
+    fConnector = FieldLineConnector()
+    fService = FieldLineService(fConnector, prefix="")
 
 ft_client = FieldTrip.Client()
 ft_IP = config.ft_IP
@@ -173,14 +182,6 @@ def fine_zero_all_working_sensors():
     wait_for_fine_zero_to_finish()
     print("All sensors fine-zeroed.")
 
-def create_channel_key_list():
-    channel_key_list = []
-    for chassis in working_chassis:
-        for sensors in working_sensors[chassis]:
-            key = str(chassis).zfill(2) + ':' + str(sensors).zfill(2) + ':' + str(28).zfill(2)
-            channel_key_list.append(key)
-    return channel_key_list
-
 def connect_to_fieldtrip_buffer():
     ft_client.connect(ft_IP, ft_port)
     if ft_client.isConnected:
@@ -208,7 +209,7 @@ def force_init_sensors():
     coarse_zero_all_working_sensors()
     fine_zero_all_working_sensors()
     global channel_key_list
-    channel_key_list = create_channel_key_list()
+    channel_key_list = tools.create_channel_key_list(working_chassis)
 
 def are_sensors_ready():
     return num_fine_zeroed_sensors() < num_working_sensors()
@@ -232,7 +233,6 @@ def parse_data(data):
             chunk[sample_i, ch_i] = data[0][channel]["data"] * data[0][channel]["calibration"] * data_stream_multiplier;
     ft_client.putData(chunk)
     # print("Writing to buffer")
-
 
 # def delayed_data_retriever_stopper(t):
 #     time.sleep(t)
