@@ -2,7 +2,6 @@
 # gabrielbmotta, juangpc
 
 import mne_fieldline_config as config
-import mne_fieldline_phantom as spooky
 import mne_fieldline_tools as tools
 
 import queue
@@ -26,6 +25,7 @@ channel_key_list = []
 ip_list = config.ip_list
 
 if(config.use_phantom):
+    import mne_fieldline_phantom as spooky
     fConnector = spooky.PhantomConnector()
     fService = spooky.PhantomService(fConnector, prefix="")
 else:
@@ -125,7 +125,7 @@ def turn_off_all_broken_sensors():
         for s in broken_sensors[ch]:
             fService.turn_off_sensor(ch, s)
 
-def continue_measurement(*argv):
+def measure(*argv):
     global measure_flag
     global measure_flag_lock
     if len(argv) == 0:
@@ -137,7 +137,7 @@ def continue_measurement(*argv):
         measure_flag_lock.acquire()
         measure_flag = argv[0]
         measure_flag_lock.release()
-        return continue_measurement()
+        return measure()
 
 def process_data(*argv):
     global process_data_flag
@@ -156,7 +156,7 @@ def process_data(*argv):
 def end_measurement():
     if fService.is_service_running():
         fService.stop()
-        continue_measurement(False)
+        measure(False)
 
 def restart_all_working_sensors():
     for ch in working_chassis:
@@ -215,14 +215,15 @@ def are_sensors_ready():
     return num_fine_zeroed_sensors() < num_working_sensors()
 
 def init_acquisition():
-    fService.start_data()
-    print("fService data started.")
-    continue_measurement(True)
-    time.sleep(1)
-    acquisition_thread = threading.Thread(target=data_retreiver_thread, daemon=True)
-    acquisition_thread.start()
-    # acquisition_thread_dalayed_stopper = threading.Thread(target=delayed_data_retriever_stopper,args=[ttime], daemon=True)
-    # acquisition_thread_dalayed_stopper.start()
+    if measure() is not True:
+        fService.start_data()
+        print("fService data started.")
+        measure(True)
+        time.sleep(1)
+        acquisition_thread = threading.Thread(target=data_retreiver_thread, daemon=True)
+        acquisition_thread.start()
+        # acquisition_thread_dalayed_stopper = threading.Thread(target=delayed_data_retriever_stopper,args=[ttime], daemon=True)
+        # acquisition_thread_dalayed_stopper.start()
 
 def parse_data(data):
     global channel_key_list
@@ -240,24 +241,25 @@ def parse_data(data):
 #     time.sleep(.5)
     
 def data_retreiver_thread():
-    while continue_measurement():
+    while measure():
         data = fConnector.data_q.get()
         parse_data(data)
         fConnector.data_q.task_done()
 
 def init_fieldline_connection():
-    fService.start()
-    print ("Fieldline service started.")
-    time.sleep(.5)
-    fService.connect(ip_list)
-    while fService.get_sensor_state(0,1) is None:
-        time.sleep(1)
-    print ("Fieldline service connected.")
-    for chassis in working_chassis:
-        version = fService.get_version(chassis)
-        print("Connection with chassis: " + str(chassis) + "... OK")
-        print("Chassis " + str(version))
-    print("---")
+    if fService.is_service_running() is not True:
+        fService.start()
+        print ("Fieldline service started.")
+        time.sleep(.5)
+        fService.connect(ip_list)
+        while fService.get_sensor_state(0,1) is None:
+            time.sleep(1)
+        print ("Fieldline service connected.")
+        for chassis in working_chassis:
+            version = fService.get_version(chassis)
+            print("Connection with chassis: " + str(chassis) + "... OK")
+            print("Chassis " + str(version))
+        print("---")
 
 def init_fieldtrip_connection():
     connect_to_fieldtrip_buffer()
@@ -266,17 +268,18 @@ def init_fieldtrip_connection():
 
 # def start_acquisition():
 #     process_data(True)
-#     continue_measurement(True)
+#     measure(True)
 
 # def stop_acquisition():
 #     process_data(False)
-#     continue_measurement(False)
+#     measure(False)
 
 def stop_measurement():
-    process_data(False)
-    continue_measurement(False)
-    fConnector.data_q.join()
-    fService.stop_data()
+    if measure() is True:
+        process_data(False)
+        measure(False)
+        fConnector.data_q.join()
+        fService.stop_data()
     
 def stop_service():
     if fService.is_service_running():
