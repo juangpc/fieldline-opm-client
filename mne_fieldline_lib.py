@@ -2,7 +2,7 @@
 # gabrielbmotta, juangpc
 
 import mne_fieldline_config as config
-import mne_fieldline_tools as tools
+# import mne_fieldline_tools as tools
 
 import queue
 import time
@@ -203,16 +203,24 @@ def init_sensors():
     if num_fine_zeroed_sensors() < num_working_sensors():
         force_init_sensors()
 
+def create_channel_key_list(channel_list):
+    channel_key_list = []
+    for chassis in channel_list:
+        for sensors in working_sensors[chassis]:
+            key = str(chassis).zfill(2) + ':' + str(sensors).zfill(2) + ':' + str(28).zfill(2)
+            channel_key_list.append(key)
+    return channel_key_list
+
 def force_init_sensors():
     turn_off_all_broken_sensors()
     restart_all_working_sensors()
     coarse_zero_all_working_sensors()
     fine_zero_all_working_sensors()
     global channel_key_list
-    channel_key_list = tools.create_channel_key_list(working_chassis)
+    channel_key_list = create_channel_key_list(working_chassis)
 
 def are_sensors_ready():
-    return num_fine_zeroed_sensors() < num_working_sensors()
+    return num_fine_zeroed_sensors() == num_working_sensors()
 
 def init_acquisition():
     if measure() is not True:

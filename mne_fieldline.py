@@ -20,7 +20,7 @@ def disconnect():
 class main_runner:
     def __init__(self):
         connect()
-        init_sensors()
+        lib.init_sensors()
         pass
 
     def __del__(self):
