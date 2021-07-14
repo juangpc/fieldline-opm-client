@@ -11,7 +11,7 @@ import numpy
 
 import FieldTrip
 
-measure_flag = True
+measure_flag = False
 measure_flag_lock = threading.Lock()
 process_data_flag = False
 process_data_flag_lock = threading.Lock()
