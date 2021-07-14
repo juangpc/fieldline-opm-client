@@ -1,5 +1,5 @@
 #### FIELDLINE CHASSIS SETTINGS
-ip_list = ['192.168.111.103','192.168.111.102']
+ip_list = ['192.168.111.101','192.168.111.100']
 working_chassis = [0, 1]
 broken_sensors = [(2, 6, 16),()]
 working_sensors = [(1, 3, 4, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15),

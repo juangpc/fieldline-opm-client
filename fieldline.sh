@@ -54,6 +54,7 @@ elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
         # ft buffer
         ./buffer/linux/buffer &> /dev/null &
         BUFFER_PID=$!
+        echo Fieldtrip Buffer running with pid ${BUFFER_PID}
 
         # Fieldline
         python3 mne_fieldline.py

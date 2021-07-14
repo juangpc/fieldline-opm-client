@@ -26,8 +26,9 @@ ip_list = config.ip_list
 
 if(config.use_phantom):
     import mne_fieldline_phantom as spooky
-    fConnector = spooky.PhantomConnector()
-    fService = spooky.PhantomService(fConnector, prefix="")
+    print("Using phantom device")
+    # fConnector = spooky.PhantomConnector()
+    # fService = spooky.PhantomService(fConnector, prefix="")
 else:
     from fieldline_connector import FieldLineConnector
     from fieldline_api.fieldline_service import FieldLineService
@@ -259,8 +260,11 @@ def init_fieldline_connection():
         fService.start()
         print ("Fieldline service started.")
         time.sleep(.5)
-        fService.connect(ip_list)
-        while fService.get_sensor_state(0,1) is None:
+        print("About to connect to ips : " + str(ip_list))
+        output = fService.connect(ip_list)
+        print(str(output))
+        while fService.get_sensor_state(0, working_sensors[0][4]) is None:
+            print("Doh!")
             time.sleep(1)
         print ("Fieldline service connected.")
         for chassis in working_chassis:

@@ -1,6 +1,7 @@
 import mne_fieldline_lib as lib
 
 def connect():
+    print("About to Connect")
     lib.init_fieldline_connection()
     lib.init_fieldtrip_connection()
     lib.init_sensors()
