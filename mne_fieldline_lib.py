@@ -290,7 +290,7 @@ def stop_measurement():
     if measure() is True:
         process_data(False)
         measure(False)
-        fConnector.data_q.join()
+        # fConnector.data_q.join()
         fService.stop_data()
     
 def stop_service():
