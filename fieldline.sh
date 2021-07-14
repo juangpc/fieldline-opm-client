@@ -33,8 +33,8 @@ elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
     # ######################################################
     # ############## LINUX SECTION #########################
 
-    PYTHON_VERSION="$(python3.8 --version)"
-    if [[ ${PYTHON_VERSION} == "Python 3."* ]] 
+    PYTHON_VERSION="$(python3 --version)"
+    if [[ ${PYTHON_VERSION} = "Python 3."* ]]
         then
         PYTHON_OK=true
         echo Python 3 version meets minimum requirements
@@ -43,7 +43,7 @@ elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
         echo Python 3 version does not meet minimum requirements
     fi
 
-    if [[ ${PYTHON_OK} ]] 
+    if [[ "${PYTHON_OK}" = true ]]
         then
         # Setup environment
         python3.8 -m venv venv
