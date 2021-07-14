@@ -30,8 +30,10 @@ class main_runner:
         disconnect()
         
 if __name__ == "__main__":
-    mr = main_runner()
-    
+    # mr = main_runner()    
+    connect()
+    lib.init_sensors()
+
     continue_loop = True
     while(continue_loop):
         print("Commands:")
@@ -48,3 +50,6 @@ if __name__ == "__main__":
         elif command == "exit":
             print("Exiting program.")
             continue_loop = False
+            print("Destructor called") 
+    stop_measurement()
+    disconnect()
