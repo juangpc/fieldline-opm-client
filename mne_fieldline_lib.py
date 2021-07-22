@@ -104,6 +104,8 @@ def num_coarse_zeroed_sensors():
 
 def num_fine_zeroed_sensors():
     num_sens = 0
+    print("fine zeroed sensors:")
+    print(fConnector.fine_zero_sensors)
     if fConnector.fine_zero_sensors:
         for sensors_in_chassis in fConnector.fine_zero_sensors.values():
             num_sens += len(sensors_in_chassis)
@@ -224,7 +226,7 @@ def are_sensors_ready():
     return num_fine_zeroed_sensors() == num_working_sensors()
 
 def init_acquisition():
-    if measure() is not True:
+    if measure() is False:
         fService.start_data()
         print("fService data started.")
         measure(True)
@@ -233,6 +235,9 @@ def init_acquisition():
         acquisition_thread.start()
         # acquisition_thread_dalayed_stopper = threading.Thread(target=delayed_data_retriever_stopper,args=[ttime], daemon=True)
         # acquisition_thread_dalayed_stopper.start()
+    else:
+        stop_measurement()
+        init_acquisition
 
 def parse_data(data):
     global channel_key_list
@@ -241,6 +246,7 @@ def parse_data(data):
     for sample_i in range(len(data)):
         for ch_i, channel in enumerate(channel_key_list):
             chunk[sample_i, ch_i] = data[0][channel]["data"] * data[0][channel]["calibration"] * data_stream_multiplier;
+    # ft_client.putData(chunk)
     ft_client.putData(chunk)
     # print("Writing to buffer")
 
@@ -297,12 +303,5 @@ def stop_service():
     if fService.is_service_running():
         fService.stop()
 
-if __name__ == "__main__":
-    
-    init_fieldline_connection()
-    init_sensors()
 
-    init_acquisition()
-    # time.sleep(15)
-    # stop_acquisition()
 

@@ -21,28 +21,32 @@ def stop_measurement():
 def disconnect():
     lib.stop_service()
 
-class main_runner:
-    def __init__(self):
-        connect()
-        lib.init_sensors()
-        pass
+def print_commands():
+    print("Commands:")
+    print("\tInitialize sensors - init")
+    print("\tStart Measurment - start")
+    print("\tStop Measurement - stop")
+    print("\tDisconnect and exit - exit")
 
-    def __del__(self):
-        print("Destructor called") 
-        stop_measurement()
-        disconnect()
-        
 if __name__ == "__main__":
-    # mr = main_runner()    
     connect()
-    lib.init_sensors()
+
+    print("\t ************************************************")
+    print("\t ************************************************")
+    print("\t ******                                   *******")
+    print("\t ******             IMPORTANT             *******")
+    print("\t ******                                   *******")
+    print("\t ******     MAKE SURE YOU INITIALIZE      *******")
+    print("\t ******   THE SENSORS BEFORE YOU START    *******")
+    print("\t ******                                   *******")
+    print("\t ************************************************")
+    print("\t ************************************************")
 
     continue_loop = True
     while(continue_loop):
-        print("Commands:")
-        print("\tStart Measurment - start")
-        print("\tStop Measurement - stop")
-        print("\tDisconnect and exit - exit")
+
+        print_commands()
+
         command = input("Select command: ")
         if command == "start":
             print("Starting measurement...")
@@ -50,9 +54,12 @@ if __name__ == "__main__":
         elif command == "stop":
             print("Stopping measurement...")
             stop_measurement()
+        elif command == "init":
+            tune_sensors()
         elif command == "exit":
             print("Exiting program.")
             continue_loop = False
-            print("Destructor called") 
+            print("Destructor called")
+
     stop_measurement()
     disconnect()
