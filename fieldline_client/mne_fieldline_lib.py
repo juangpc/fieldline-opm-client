@@ -9,7 +9,7 @@ import time
 import threading
 import numpy
 
-import fieldline_client.FieldTrip
+import fieldline_client.FieldTrip as FieldTrip
 
 measure_flag = False
 measure_flag_lock = threading.Lock()
@@ -30,7 +30,7 @@ if(config.use_phantom):
     # fConnector = spooky.PhantomConnector()
     # fService = spooky.PhantomService(fConnector, prefix="")
 else:
-    from fieldline_connector import FieldLineConnector
+    from fieldline_client.fieldline_connector import FieldLineConnector
     from fieldline_api.fieldline_service import FieldLineService
     from fieldline_api.fieldline_datatype import FieldLineWaveType
 
