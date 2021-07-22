@@ -1,7 +1,7 @@
 # mne_fieldline_connector
 # gabrielbmotta, juangpc
 
-import mne_fieldline_config as config
+import fieldline_client.mne_fieldline_config as config
 # import mne_fieldline_tools as tools
 
 import queue
@@ -9,7 +9,7 @@ import time
 import threading
 import numpy
 
-import FieldTrip
+import fieldline_client.FieldTrip
 
 measure_flag = False
 measure_flag_lock = threading.Lock()
