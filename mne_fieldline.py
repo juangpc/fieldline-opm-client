@@ -4,13 +4,16 @@ def connect():
     print("About to Connect")
     lib.init_fieldline_connection()
     lib.init_fieldtrip_connection()
+
+def tune_sensors():
     lib.init_sensors()
 
 def start_measurement():
-    if lib.are_sensors_ready():
-        lib.init_acquisition()
-    else:
-        print("Sensors are not initialized")
+    lib.init_acquisition()
+    # if lib.are_sensors_ready():
+    #     lib.init_acquisition()
+    # else:
+    #     print("Sensors are not initialized")
 
 def stop_measurement():
     lib.stop_measurement()
