@@ -1,4 +1,4 @@
-import mne_fieldline_lib as lib
+import fieldline_client.mne_fieldline_lib as lib
 
 def connect():
     print("About to Connect")

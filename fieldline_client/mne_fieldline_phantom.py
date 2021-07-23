@@ -1,8 +1,8 @@
 import queue
 from collections import defaultdict
 
-import mne_fieldline_config as config
-import mne_fieldline_tools as tools
+import fieldline_client.mne_fieldline_config as config
+import fieldline_client.mne_fieldline_tools as tools
 
 class PhantomConnector:
 
