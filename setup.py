@@ -65,8 +65,8 @@ if __name__ == "__main__":
               'fieldline_api'
           ],
           dependency_links=[
-            # location to your egg file
-            'file://' + os.path.join(os.getcwd(), 'fieldline_api-0.0.13-py3-none-any.whl')
+            ('https://github.com/jasmainak/fieldline-opm-client/raw/setup_file/'
+             'fieldline_api-0.0.13-py3-none-any.whl#egg=fieldline_client')
           ],
           packages=find_packages()
           )
