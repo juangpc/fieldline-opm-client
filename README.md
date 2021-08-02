@@ -5,18 +5,16 @@
 We recommend using the [Anaconda](https://www.anaconda.com/) package
 library for system-independent installation.
 
-### Optional step
-If you want to manage the dependencies in a virtual environment, do
-the following:
+Next, create a virtual environment:
 
     conda create -n opm_virtual_env python=3.8
     conda activate opm_virtual_env
 
-Once you have Python installed through Anaconda, do the following:
+Once you have Python3.8 virtual environment, do the following:
 
     python -m pip install git+https://github.com/juangpc/fieldline-opm-client.git#egg=fieldline_client -r https://raw.githubusercontent.com/juangpc/fieldline-opm-client/main/requirements.txt
 
-To start the Fieldline client, type:
+Finally, to start the Fieldline client, type:
 
     fieldline_client
 
