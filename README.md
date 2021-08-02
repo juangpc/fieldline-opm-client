@@ -14,7 +14,7 @@ the following:
 
 Once you have Python installed through Anaconda, do the following:
 
-    pip install -e git+https://github.com/juangpc/fieldline-opm-client.git#egg=fieldline_client
+    pip install git+https://github.com/juangpc/fieldline-opm-client.git#egg=fieldline_client -r https://raw.githubusercontent.com/juangpc/fieldline-opm-client/main/requirements.txt
 
 ## Dependencies
 

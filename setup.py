@@ -54,19 +54,5 @@ if __name__ == "__main__":
               'Operating System :: MacOS',
           ],
           platforms='any',
-          install_requires=[
-              'appdirs==1.4.3',
-              'ifaddr==0.1.6',
-              'netifaces==0.10.9',
-              'numpy==1.18.2',
-              'protobuf==3.11.3',
-              'six==1.14.0',
-              'zeroconf==0.24.5',
-              'fieldline_api'
-          ],
-          dependency_links=[
-            ('https://github.com/jasmainak/fieldline-opm-client/raw/setup_file/'
-             'fieldline_api-0.0.13-py3-none-any.whl#egg=fieldline_client')
-          ],
           packages=find_packages()
           )
