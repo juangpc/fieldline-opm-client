@@ -54,5 +54,8 @@ if __name__ == "__main__":
               'Operating System :: MacOS',
           ],
           platforms='any',
-          packages=find_packages()
+          packages=find_packages(),
+          entry_points={'console_scripts': [
+              'fieldline_client = fieldline_client.mne_fieldline:main',
+          ]}
           )

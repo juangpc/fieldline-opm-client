@@ -28,7 +28,7 @@ def print_commands():
     print("\tStop Measurement - stop")
     print("\tDisconnect and exit - exit")
 
-if __name__ == "__main__":
+def main():
     connect()
 
     print("\t ************************************************")
@@ -63,3 +63,6 @@ if __name__ == "__main__":
 
     stop_measurement()
     disconnect()
+
+if __name__ == '__main__':
+    main()
