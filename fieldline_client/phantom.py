@@ -3,7 +3,7 @@ from collections import defaultdict
 
 import numpy
 
-from .mne_fieldline_config import working_sensors
+from .config import working_sensors
 
 class PhantomConnector:
 

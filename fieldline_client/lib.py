@@ -8,9 +8,9 @@ import threading
 import numpy as np
 
 from .FieldTrip import Client, DATATYPE_FLOAT32
-from .mne_fieldline_config import (
-    working_chassis, broken_sensors, working_sensors,
-    ip_list, use_phantom, ft_IP, ft_port)
+from .config import (working_chassis, broken_sensors,
+                     working_sensors, ip_list,
+                     use_phantom, ft_IP, ft_port)
 
 measure_flag = False
 measure_flag_lock = threading.Lock()
@@ -18,14 +18,9 @@ process_data_flag = False
 process_data_flag_lock = threading.Lock()
 
 default_sample_freq = 1000
-working_chassis = working_chassis
-broken_sensors = broken_sensors
-working_sensors = working_sensors
 channel_key_list = []
 
-ip_list = ip_list
-
-if(use_phantom):
+if use_phantom:
     import mne_fieldline_phantom as spooky
     print("Using phantom device")
     # fConnector = spooky.PhantomConnector()

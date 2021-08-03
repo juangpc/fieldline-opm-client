@@ -1,6 +1,6 @@
-from .mne_fieldline_lib import (init_fieldline_connection, init_sensors,
-                                init_acquisition, stop_measurement,
-                                stop_service, init_fieldtrip_connection)
+from .lib import (init_fieldline_connection, init_sensors,
+                  init_acquisition, stop_measurement,
+                  stop_service, init_fieldtrip_connection)
 
 def connect():
     print("About to Connect")
