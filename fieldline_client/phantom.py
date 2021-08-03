@@ -1,8 +1,9 @@
 import queue
 from collections import defaultdict
 
-import fieldline_client.mne_fieldline_config as config
-import fieldline_client.mne_fieldline_tools as tools
+import numpy
+
+from .config import working_sensors
 
 class PhantomConnector:
 
@@ -20,7 +21,7 @@ class PhantomConnector:
 
         self.data_q = queue.Queue()
 
-        self.moc_sensor_list = config.working_sensors
+        self.moc_sensor_list = working_sensors
         self.moc_chassis_ip_list = []
         self.moc_sensors = {}
 

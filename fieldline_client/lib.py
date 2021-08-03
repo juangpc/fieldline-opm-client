@@ -1,15 +1,16 @@
 # mne_fieldline_connector
 # gabrielbmotta, juangpc
 
-import fieldline_client.mne_fieldline_config as config
-# import mne_fieldline_tools as tools
-
 import queue
 import time
 import threading
-import numpy
 
-import fieldline_client.FieldTrip as FieldTrip
+import numpy as np
+
+from .FieldTrip import Client, DATATYPE_FLOAT32
+from .config import (working_chassis, broken_sensors,
+                     working_sensors, ip_list,
+                     use_phantom, ft_IP, ft_port)
 
 measure_flag = False
 measure_flag_lock = threading.Lock()
@@ -17,30 +18,23 @@ process_data_flag = False
 process_data_flag_lock = threading.Lock()
 
 default_sample_freq = 1000
-working_chassis = config.working_chassis
-broken_sensors = config.broken_sensors
-working_sensors = config.working_sensors
 channel_key_list = []
 
-ip_list = config.ip_list
-
-if(config.use_phantom):
+if use_phantom:
     import mne_fieldline_phantom as spooky
     print("Using phantom device")
     # fConnector = spooky.PhantomConnector()
     # fService = spooky.PhantomService(fConnector, prefix="")
 else:
-    from fieldline_client.fieldline_connector import FieldLineConnector
+    from .fieldline_connector import FieldLineConnector
     from fieldline_api.fieldline_service import FieldLineService
     from fieldline_api.fieldline_datatype import FieldLineWaveType
 
     fConnector = FieldLineConnector()
     fService = FieldLineService(fConnector, prefix="")
 
-ft_client = FieldTrip.Client()
-ft_IP = config.ft_IP
-ft_port = config.ft_port
-ft_data_type = FieldTrip.DATATYPE_FLOAT32
+ft_client = Client()
+ft_data_type = DATATYPE_FLOAT32
 
 data_stream_multiplier = 1
 
@@ -51,7 +45,7 @@ class fieldline_phantom:
         self.num_sensors = num_sensors
         self.sample_frequency = sample_frequency
         self.num_samples = 200
-        self.ft_client = FieldTrip.Client()
+        self.ft_client = Client()
         self.send_data_flag = False
         self.send_data_flag_lock = threading.Lock()
         self.send_data_thread = threading.Thread(target=self.data_producer_routine, daemon = True)
@@ -63,7 +57,7 @@ class fieldline_phantom:
         ft_IP = ip
         ft_port = port
         self.ft_client.connect(ft_IP, ft_port)
-        self.ft_client.putHeader(self.num_sensors, self.sample_frequency, FieldTrip.DATATYPE_FLOAT32)
+        self.ft_client.putHeader(self.num_sensors, self.sample_frequency, DATATYPE_FLOAT32)
         self.send_data_thread.start()
 
     def start(self):
@@ -79,7 +73,7 @@ class fieldline_phantom:
     def data_producer_routine(self):
         while True:
             if self.send_data_flag:
-                data = numpy.random.rand(self.num_samples, self.num_sensors).astype(numpy.float32) * 1e-12
+                data = np.random.rand(self.num_samples, self.num_sensors).astype(np.float32) * 1e-12
                 self.ft_client.putData(data)
 
 def num_working_sensors():
@@ -199,7 +193,7 @@ def init_ft_header():
 
 
 def test_data_to_ft():
-    arr_data = nunmpy.zeros((200,num_working_sensors()), dtype=numpy.single)
+    arr_data = np.zeros((200,num_working_sensors()), dtype=np.single)
     ft_client.putData(arr_data)
 
 def init_sensors():
@@ -242,7 +236,7 @@ def init_acquisition():
 def parse_data(data):
     global channel_key_list
     global data_stream_multiplier
-    chunk = numpy.zeros((len(data),num_working_sensors()), dtype=numpy.single)
+    chunk = np.zeros((len(data),num_working_sensors()), dtype=np.single)
     for sample_i in range(len(data)):
         for ch_i, channel in enumerate(channel_key_list):
             chunk[sample_i, ch_i] = data[0][channel]["data"] * data[0][channel]["calibration"] * data_stream_multiplier;

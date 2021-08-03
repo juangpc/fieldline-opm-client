@@ -56,6 +56,6 @@ if __name__ == "__main__":
           platforms='any',
           packages=find_packages(),
           entry_points={'console_scripts': [
-              'fieldline_client = fieldline_client.mne_fieldline:main',
+              'fieldline_client = fieldline_client.start:main',
           ]}
           )
