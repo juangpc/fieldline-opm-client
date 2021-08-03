@@ -1,25 +1,27 @@
-import fieldline_client.mne_fieldline_lib as lib
+from .mne_fieldline_lib import (init_fieldline_connection, init_sensors,
+                                init_acquisition, stop_measurement,
+                                stop_service, init_fieldtrip_connection)
 
 def connect():
     print("About to Connect")
-    lib.init_fieldline_connection()
-    lib.init_fieldtrip_connection()
+    init_fieldline_connection()
+    init_fieldtrip_connection()
 
 def tune_sensors():
-    lib.init_sensors()
+    init_sensors()
 
 def start_measurement():
-    lib.init_acquisition()
-    # if lib.are_sensors_ready():
-    #     lib.init_acquisition()
+    init_acquisition()
+    # if are_sensors_ready():
+    #     init_acquisition()
     # else:
     #     print("Sensors are not initialized")
 
 def stop_measurement():
-    lib.stop_measurement()
+    stop_measurement()
 
 def disconnect():
-    lib.stop_service()
+    stop_service()
 
 def print_commands():
     print("Commands:")
