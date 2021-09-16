@@ -26,7 +26,7 @@ if use_phantom:
     # fConnector = spooky.PhantomConnector()
     # fService = spooky.PhantomService(fConnector, prefix="")
 else:
-    from .fieldline_connector import FieldLineConnector
+    from .connector import FieldLineConnector
     from fieldline_api.fieldline_service import FieldLineService
     from fieldline_api.fieldline_datatype import FieldLineWaveType
 
