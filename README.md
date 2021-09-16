@@ -51,3 +51,4 @@ Finally, to start the Fieldline client, type:
 - 0.0.10 - Few API cleanup items
 - 0.0.2 - add start_adc and stop_adc calls
 - 0.0.1 - initial release
+
