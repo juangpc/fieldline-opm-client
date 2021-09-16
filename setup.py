@@ -54,6 +54,7 @@ if __name__ == "__main__":
               'Operating System :: MacOS',
           ],
           platforms='any',
+          python_requires='>=3.8',
           packages=find_packages(),
           entry_points={'console_scripts': [
               'fieldline_client = fieldline_client.start:main',
