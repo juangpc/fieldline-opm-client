@@ -197,8 +197,8 @@ def create_channel_label_list():
     for chassis in working_chassis:
         for s in working_sensors[chassis]
             label = str(chassis) + '|' + str(s).zfill(2)
-            channel_names.append(label)
-    return channeel_labels
+            channel_labels.append(label)
+    return channel_labels
 
 def test_data_to_ft():
     arr_data = np.zeros((200,num_working_sensors()), dtype=np.single)
