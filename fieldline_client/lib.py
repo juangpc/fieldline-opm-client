@@ -185,12 +185,20 @@ def connect_to_fieldtrip_buffer():
         print("Fieldtrip Client connected")
 
 def init_ft_header():
+    labels = create_channel_label_list()
     if ft_client.isConnected:
-        ft_client.putHeader(num_working_sensors(), default_sample_freq, ft_data_type)
+        ft_client.putHeader(num_working_sensors(), default_sample_freq, ft_data_type, labels)
         header = ft_client.getHeader()
         if header.nChannels == num_working_sensors():
             print("Fieldtrip header initialized")
 
+def create_channel_label_list():
+    channel_labels = []
+    for chassis in working_chassis:
+        for s in working_sensors[chassis]
+            label = str(chassis) + '|' + str(s).zfill(2)
+            channel_names.append(label)
+    return channeel_labels
 
 def test_data_to_ft():
     arr_data = np.zeros((200,num_working_sensors()), dtype=np.single)
@@ -264,7 +272,7 @@ def init_fieldline_connection():
         output = fService.connect(ip_list)
         print(str(output))
         while fService.get_sensor_state(0, working_sensors[0][4]) is None:
-            print("Doh!")
+            print("Doh! No Fieldline Device Detected")
             time.sleep(1)
         print ("Fieldline service connected.")
         for chassis in working_chassis:
