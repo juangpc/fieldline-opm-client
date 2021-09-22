@@ -35,12 +35,12 @@ ft_client.putHeader(len(channel_names), 1000, DATATYPE_FLOAT32, channel_names)
 header = ft_client.getHeader()
 print(header)
 
-data = np.random.rand(1000, len(channel_names)).astype(np.float32) * 1e-12
+data = np.random.rand(1000, len(channel_names)).astype(np.float32) * 1e-11
 
 ft_client.putData(data)
 
 
 while True:
-  data = np.random.rand(1000, len(channel_names)).astype(np.float32) * 1e-12
+  data = np.random.rand(1000, len(channel_names)).astype(np.float32) * 1e-11
   ft_client.putData(data)
   time.sleep(1)
